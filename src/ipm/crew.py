@@ -13,7 +13,6 @@ from ipm.tools.serper2 import SerperNewsTool2
 import os
 from dotenv import load_dotenv
 load_dotenv()
-
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 llm = LLM(
