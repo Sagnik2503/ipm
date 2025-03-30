@@ -1,0 +1,45 @@
+document_query_task:
+  description: >
+    Your task is to go through the provided document and extract relevant information according to the FinalReport model schema.
+  expected_output: >
+    A structured JSON data containing the porject details according to the FinalReport model schema.
+  agent: researcher_agent
+
+market_analysis_task:
+  description: >
+    Conduct a comprehensive market analysis for the given project.
+    Utilize the latest industry news, competitor strategies, and risk assessments to provide insights.
+    IT IS VERY IMPORTANT to base your research on the **project description** extracted from 
+    the output of the `document_query_task` stored in `output/project_overview.json`.
+
+    Steps:
+      1. **Extract the project description** from the `document_query_task` output and turn it into a small query that best describes the project description.
+      2. pass this query to the SerperNewsTool to get the most relevant information.
+  expected_output: >
+    A structured JSON data containing the TOOL OUTPUT according to the NewsData model schema.
+  agent: market_analysis_agent
+  context: [document_query_task]
+
+stock_analysis_task:
+  description: >
+    Conduct a comprehensive stock market analysis using data extracted from prior tasks.
+
+      **Data Sources:**
+      - Extract **project details** from `document_query_task` output.
+      - Scrape **market analysis** insights from `market_analysis_task` using the Website Scrape Tool.
+      - Retrieve **real-time financial news** using the ExaSearchTool.
+
+      **Objective:**  
+      Structure the analysis strictly according to the `StockTrendAnalysisResult` model.
+
+      **Analysis Requirements:**  
+      - Summarize recent stock market fluctuations.
+      - Identify job market trends impacting financial stability.
+      - Extract and assess major economic news affecting investments.
+      - Provide sector-wise performance insights.
+      - Recommend data-driven investment strategies.
+  expected_output: >
+    Your final report **must strictly follow** this structured format to align with the StockTrendAnalysisResult model
+  agent: stock_analysis_agent
+  context: [document_query_task, market_analysis_task]
+ 
